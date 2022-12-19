@@ -1,0 +1,95 @@
+<div *ngIf="loading == true" class="loading-container">
+    <img src="./assets/pokemon_ball.gif" alt="Cargando" class="loading-img">
+    <label class="loading-text center">Cargando...</label>
+</div>
+<div *ngIf="loading == false">
+    <div class="row title">
+        ¡Hola! Configuremos tu perfil
+    </div>
+    <div class="row subtitle">
+        Queremos conocerte mejor.
+    </div>
+    <div class="row">
+        <div class="col-6 profile-col">
+            <div class="profile-container">
+                <div class="row profile-title">Imagen perfil</div>
+                <div class="row picture-row">
+                    <div class="picture-container">
+                        <div *ngIf="url == ''" class="picture-background">
+                            <mat-icon class="profile-icon">person_outline</mat-icon>
+                        </div>
+                        <div *ngIf="url != ''" class="profile-image-container center">
+                            <img [src]="url" alt="Imagen de perfil" class="profile-image">
+                        </div>
+                    </div>
+                </div>
+                <div class="row center">
+                    <div class="input-container">
+                        <label for="upload-photo" class="input-label" [ngClass]="{'pointer': file == undefined}">
+                            <div class="col-9">
+                                <span *ngIf="file == undefined">
+                                    Adjunta una foto
+                                </span>
+                                <span *ngIf="file != undefined">
+                                    {{(file[0].name.length > 25)? (file[0].name | slice:0:25)+'...':(file[0].name)}}
+                                </span>
+                            </div>
+                            <div class="col-3 center" [ngClass]="{'pointer': file != undefined}" (click)="deleteFile()">
+                                <mat-icon *ngIf="file == undefined">cloud_upload</mat-icon>
+                                <mat-icon *ngIf="file != undefined" class="delete-icon">delete_forever</mat-icon>
+                            </div>
+                        </label>
+                        <input type="file" id="upload-photo" accept="image/*" (change)="onFileSelected($event)" *ngIf="isFile == false">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 form-col">
+            <div class="row second-title">Tu información</div>
+            <div class="row subtitle">
+                Completa la siguiente información para completar tu perfil.
+            </div>
+            <form [formGroup]="profileForm" (ngSubmit)="nextStep()">
+                <div class="row">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nombre</mat-label>
+                        <input matInput formControlName="name">
+                        <mat-error>{{errorMessageName()}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Pasatiempo favorito</mat-label>
+                        <mat-select formControlName="hobbie">
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let hobbie of hobbies" [value]="hobbie">
+                                {{hobbie}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Cumpleaños</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="birthday" readonly [max]="today">
+                        <mat-error>Ingresa tu fecha de nacimiento para continuar</mat-error>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Documento de identidad</mat-label>
+                        <input matInput formControlName="document" [readonly]="readonlyDocInput == true">
+                        <mat-error>{{errorMessageDoc()}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <br>
+                <br>
+                <div class="row center">
+                    <button type="submit" class="btn continue-btn" [ngClass]="{'disabled-btn': !profileForm.valid}">Continuar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

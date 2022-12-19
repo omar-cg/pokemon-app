@@ -1,1 +1,48 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.row {
+    --bs-gutter-x: 0 !important;
+}
+
+.title {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 35px;
+    line-height: 52px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #185A7D;
+    margin-bottom: 15px;
+}
+
+.second-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 48px;
+    color: #01426A;
+}
+
+.subtitle {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 27px;
+    display: flex;
+    align-items: center;
+    color: #868686;
+    margin-bottom: 50px;
+}
+
+.loading-text {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 35px;
+    line-height: 52px;
+    color: #185A7D;
+}
