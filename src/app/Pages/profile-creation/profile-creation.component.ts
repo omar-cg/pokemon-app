@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as moment from 'moment';
+import { FirebaseService } from 'src/app/Services/firebase.service';
 
 @Component({
   selector: 'app-profile-creation',
@@ -22,8 +23,8 @@ export class ProfileCreationComponent implements OnInit {
     document: new FormControl('')
   });
 
-  constructor() {
-  }
+  constructor(private fireService: FirebaseService) {}
+
   ngOnInit() {
     this.profileForm.get("birthday")?.valueChanges.subscribe(value => {
       var now = moment(new Date);
@@ -83,10 +84,12 @@ export class ProfileCreationComponent implements OnInit {
     }, 500);
   }
 
-  nextStep() {
+  async nextStep() {
     this.loading = true;
-    setTimeout(() => {
-      this.loading = false;
-    }, 1000);
+    await this.fireService.addProfile(this.profileForm.value).then(response => {
+      if (response.id) {
+        this.loading = false;
+      }
+    })
   }
 }
