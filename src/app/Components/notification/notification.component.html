@@ -1,0 +1,14 @@
+<span class="snack-container">
+    <div class="row">
+        <div class="col-2 center">
+            <mat-icon class="success-color" *ngIf="data.status == 'Success'">check_circle</mat-icon>
+            <mat-icon class="error-color" *ngIf="data.status == 'Error'">cancel</mat-icon>
+        </div>
+        <div class="col label-col font-color">
+            {{data.message}}
+        </div>
+        <div class="col-2 center font-color">
+            <mat-icon class="pointer" (click)="dismiss()">close</mat-icon>
+        </div>
+    </div>
+</span>

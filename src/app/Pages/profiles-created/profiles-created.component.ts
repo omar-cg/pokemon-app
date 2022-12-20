@@ -7,6 +7,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { WarningsDialogComponent } from 'src/app/Components/warnings-dialog/warnings-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationComponent } from 'src/app/Components/notification/notification.component';
 
 @Component({
   selector: 'app-profiles-created',
@@ -21,7 +23,8 @@ export class ProfilesCreatedComponent implements OnInit {
   constructor(
     private fireService: FirebaseService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private snackbar: MatSnackBar
   ){}
 
   ngOnInit() {
@@ -60,9 +63,19 @@ export class ProfilesCreatedComponent implements OnInit {
     });
   }
 
+  openSnackBar(message: string, status: string) {
+    this.snackbar.openFromComponent(NotificationComponent, {
+      duration: 3000,
+      panelClass: ['snackbar-styles'],
+      data: {message: message, status: status}
+    });
+  }
+
   async deleteProfile(profile: Profile) {
     await this.fireService.deleteProfile(profile).then(() => {
-      
-    })
+      this.openSnackBar('Perfil eliminado exitosamente', 'Success');
+    }).catch(() => {
+      this.openSnackBar('El perfil no pudo ser eliminado', 'Error');
+    });
   }
 }

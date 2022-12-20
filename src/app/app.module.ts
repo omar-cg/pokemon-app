@@ -21,6 +21,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { WarningsDialogComponent } from './Components/warnings-dialog/warnings-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { NotificationComponent } from './Components/notification/notification.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     ProfileCreationComponent,
     HomeComponent,
     ProfilesCreatedComponent,
-    WarningsDialogComponent
+    WarningsDialogComponent,
+    NotificationComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +48,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatTableModule,
     MatPaginatorModule,
     MatDialogModule,
+    MatSnackBarModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore())
   ],
