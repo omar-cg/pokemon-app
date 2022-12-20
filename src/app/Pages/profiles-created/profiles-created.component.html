@@ -16,8 +16,16 @@
         <div *ngIf="dataSource == undefined" class="center">
             <mat-spinner></mat-spinner>
         </div>
-        <div class="mat-elevation-z8" [ngClass]="{'no-opacity': dataSource == undefined}">
+        <div class="mat-elevation-z8 table-container" [ngClass]="{'no-opacity': dataSource == undefined}">
             <table mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-icon aria-hidden="false" fontIcon="delete_outline" class="pointer" 
+                        (click)="openDialog('¿Deseas eliminar definitivamente al usuario ' + element.name + '?', element)"></mat-icon>
+                    </td>
+                </ng-container>
+
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef> Nombre </th>
                     <td mat-cell *matCellDef="let element"> {{element.name}} </td>

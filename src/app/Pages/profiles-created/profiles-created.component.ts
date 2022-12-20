@@ -5,6 +5,8 @@ import * as moment from 'moment';
 import { Router } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { WarningsDialogComponent } from 'src/app/Components/warnings-dialog/warnings-dialog.component';
 
 @Component({
   selector: 'app-profiles-created',
@@ -12,17 +14,17 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./profiles-created.component.scss']
 })
 export class ProfilesCreatedComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'age', 'hobbie', 'dui'];
+  displayedColumns: string[] = ['name', 'age', 'hobbie', 'dui', 'actions'];
   dataSource: MatTableDataSource<Profile>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private fireService: FirebaseService,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
   ){}
 
   ngOnInit() {
-    console.log(this.dataSource)
     this.fireService.getProfiles().subscribe({
       next: (response) => {
         for(let profile of response) {
@@ -41,5 +43,26 @@ export class ProfilesCreatedComponent implements OnInit {
 
   goTohome() {
     this.router.navigate(['/inicio']);
+  }
+
+  openDialog(message: string, profile: Profile) {
+    const dialogRef = this.dialog.open(WarningsDialogComponent, {
+      height: 'auto',
+      width: '300px',
+      data: {message: message}
+    })
+    dialogRef.afterClosed().subscribe({
+      next: (result) => {
+        if(result) {
+          this.deleteProfile(profile); 
+        }
+      }
+    });
+  }
+
+  async deleteProfile(profile: Profile) {
+    await this.fireService.deleteProfile(profile).then(() => {
+      
+    })
   }
 }

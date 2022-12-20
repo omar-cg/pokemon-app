@@ -19,13 +19,16 @@ import { HomeComponent } from './Pages/home/home.component';
 import { ProfilesCreatedComponent } from './Pages/profiles-created/profiles-created.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { WarningsDialogComponent } from './Components/warnings-dialog/warnings-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProfileCreationComponent,
     HomeComponent,
-    ProfilesCreatedComponent
+    ProfilesCreatedComponent,
+    WarningsDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +44,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ReactiveFormsModule,
     MatTableModule,
     MatPaginatorModule,
+    MatDialogModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore())
   ],
