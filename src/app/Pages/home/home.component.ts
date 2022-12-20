@@ -10,6 +10,10 @@ export class HomeComponent {
   constructor(private router: Router){}
 
   goToCreateProfile() {
-    this.router.navigate(['/creacion-perfil'])
+    this.router.navigate(['/creacion-perfil']);
+  }
+
+  goToProfiles() {
+    this.router.navigate(['/perfiles-creados'])
   }
 }

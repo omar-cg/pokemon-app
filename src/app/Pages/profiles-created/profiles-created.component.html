@@ -1,0 +1,47 @@
+<div>
+    <div class="row">
+        <div class="col-1 back-col">
+            <mat-icon class="pointer" (click)="goTohome()">arrow_back_ios</mat-icon>
+        </div>
+        <div class="col-11">
+            <div class="row title">
+                Lista de perfiles creados
+            </div>
+            <div class="row subtitle">
+                Selecciona un perfil para ver más detalles.
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div *ngIf="dataSource == undefined" class="center">
+            <mat-spinner></mat-spinner>
+        </div>
+        <div class="mat-elevation-z8" [ngClass]="{'no-opacity': dataSource == undefined}">
+            <table mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="age">
+                    <th mat-header-cell *matHeaderCellDef> Edad </th>
+                    <td mat-cell *matCellDef="let element"> {{element.years}} &nbsp;años </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="hobbie">
+                    <th mat-header-cell *matHeaderCellDef> Pasatiempo </th>
+                    <td mat-cell *matCellDef="let element"> {{element.hobbie}} </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="dui">
+                    <th mat-header-cell *matHeaderCellDef> DUI </th>
+                    <td mat-cell *matCellDef="let element"> {{element.document}} </td>
+                </ng-container>
+        
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons aria-label="Select page of users"></mat-paginator>
+        </div>
+    </div>
+</div>

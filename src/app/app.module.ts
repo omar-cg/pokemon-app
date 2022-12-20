@@ -16,12 +16,16 @@ import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { HomeComponent } from './Pages/home/home.component';
+import { ProfilesCreatedComponent } from './Pages/profiles-created/profiles-created.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProfileCreationComponent,
-    HomeComponent
+    HomeComponent,
+    ProfilesCreatedComponent
   ],
   imports: [
     BrowserModule,
@@ -35,6 +39,8 @@ import { HomeComponent } from './Pages/home/home.component';
     MatNativeDateModule,
     MatButtonModule,
     ReactiveFormsModule,
+    MatTableModule,
+    MatPaginatorModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore())
   ],

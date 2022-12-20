@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, collectionData, Firestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 import { Profile } from '../Models/profile.interface';
 
 @Injectable({
@@ -12,6 +13,11 @@ export class FirebaseService {
   addProfile(profile: Profile) {
     const profileRef = collection(this.firestore, 'profiles');
     return addDoc(profileRef, profile);
+  }
+
+  getProfiles(): Observable<Profile[]>{
+    const profileRef = collection(this.firestore, 'profiles');
+    return collectionData(profileRef, {idField: 'id'}) as Observable<Profile[]>;
   }
 
 }
