@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { FirebaseService } from 'src/app/Services/firebase.service';
 
@@ -23,7 +24,10 @@ export class ProfileCreationComponent implements OnInit {
     document: new FormControl('')
   });
 
-  constructor(private fireService: FirebaseService) {}
+  constructor(
+    private fireService: FirebaseService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.profileForm.get("birthday")?.valueChanges.subscribe(value => {
@@ -91,5 +95,9 @@ export class ProfileCreationComponent implements OnInit {
         this.loading = false;
       }
     })
+  }
+
+  goTohome() {
+    this.router.navigate(['/inicio']);
   }
 }

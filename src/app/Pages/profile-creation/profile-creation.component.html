@@ -3,12 +3,20 @@
     <label class="loading-text center">Cargando...</label>
 </div>
 <div *ngIf="loading == false">
-    <div class="row title">
-        ¡Hola! Configuremos tu perfil
+    <div class="row">
+        <div class="col-1 back-col">
+            <mat-icon class="pointer" (click)="goTohome()">arrow_back_ios</mat-icon>
+        </div>
+        <div class="col-11">
+            <div class="row title">
+                ¡Hola! Configuremos tu perfil
+            </div>
+            <div class="row subtitle">
+                Queremos conocerte mejor.
+            </div>
+        </div>
     </div>
-    <div class="row subtitle">
-        Queremos conocerte mejor.
-    </div>
+    
     <div class="row">
         <div class="col-6 profile-col">
             <div class="profile-container">
