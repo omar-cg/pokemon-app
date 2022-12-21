@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { NotificationComponent } from 'src/app/Components/notification/notification.component';
 import { Profile } from 'src/app/Models/profile.interface';
+import { ComponentsService } from 'src/app/Services/components.service';
 import { FirebaseService } from 'src/app/Services/firebase.service';
 import { PokemonService } from 'src/app/Services/pokemon.service';
 
@@ -27,21 +28,26 @@ export class ProfileCreationComponent implements OnInit {
   selectedPokemons: any = [];
   search: any;
   hobbies = ["Jugar Fútbol", "Jugar Basketball", "Jugar Tennis", "Jugar Voleibol", "Jugar Fifa", "Jugar Videojuegos"];
+  
   profileForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.maxLength(20), Validators.pattern('^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9 ]+$')]),
     hobbie: new FormControl(''),
     birthday: new FormControl('', Validators.required),
-    document: new FormControl('')
+    document: new FormControl(''),
+    profileImageName: new FormControl('')
   });
 
   constructor(
     private fireService: FirebaseService,
     private pokemonService: PokemonService,
     private router: Router,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private componentsService: ComponentsService
   ) {}
 
   ngOnInit() {
+    // Validaciones fecha de cumpleaños, se agregan validadores dependiendo de la edad del perfil
+
     this.profileForm.get("birthday")?.valueChanges.subscribe(value => {
       var now = moment(new Date);
       var birthday = moment(value);
@@ -57,6 +63,9 @@ export class ProfileCreationComponent implements OnInit {
         this.readonlyDocInput = true;
       }
     });
+
+
+    // Consumo de API de pokemons
 
     this.pokemonService.getPokemons().subscribe({
       next: (response: any) => {
@@ -83,6 +92,8 @@ export class ProfileCreationComponent implements OnInit {
       }
     });
   }
+
+  // Mensages de error personalizados para el formulario
   
   errorMessageName() {
     if(this.profileForm.get('name')?.hasError('required')) {
@@ -105,9 +116,14 @@ export class ProfileCreationComponent implements OnInit {
     }
   }
 
+  // Manejo de archivos
+
   onFileSelected(event: any) {
     if (event.target.files.length > 0) {
       this.file = event.target.files;
+      var now = new Date;
+      var decimalDate = moment(now).format('YYYYMMDDHHmmss');
+      this.profileForm.get('profileImageName')?.setValue(decimalDate + "_" + this.file[0].name);
       this.isFile = true;
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
@@ -124,6 +140,16 @@ export class ProfileCreationComponent implements OnInit {
       this.isFile = false;
     }, 500);
   }
+
+  uploadImage(){
+    this.fireService.uploadImage(this.file[0], this.profileForm.value.profileImageName).then(() => {
+    }).catch(error => {
+      this.openSnackBar(error, "Error")
+    });
+  }
+
+
+  // Cambio de páginas
 
   nextStep() {
     this.loading = true;
@@ -145,6 +171,8 @@ export class ProfileCreationComponent implements OnInit {
     }, 1000);
   }
 
+  // Abrir componente de notificación
+
   openSnackBar(message: string, status: string) {
     this.snackbar.openFromComponent(NotificationComponent, {
       duration: 3000,
@@ -152,6 +180,8 @@ export class ProfileCreationComponent implements OnInit {
       data: {message: message, status: status}
     });
   }
+
+  // Función para seleccionar pokemons
 
   selectPokemon(id: number) {
     if(this.selectedPokemons.length > 0) {
@@ -183,6 +213,8 @@ export class ProfileCreationComponent implements OnInit {
       }
     }
   }
+
+  // Funicón para búsqueda de pokemons
   
   searchPokemon(){
     this.pokemonService.getPokemon(this.search).subscribe({
@@ -202,15 +234,23 @@ export class ProfileCreationComponent implements OnInit {
     });
   }
 
+  // Función para guardar perfil
+
   async saveProfile() {
     this.loading = true;
     let profile: Profile = this.profileForm.value;
     profile.pokemonIds = this.selectedPokemons;
+    if (this.profileForm.value.profileImageName != "" || this.profileForm.value.profileImageName != null 
+        ||this.profileForm.value.profileImageName != undefined) {
+      this.uploadImage();
+    }
     if (this.profileForm.valid) {
       await this.fireService.addProfile(profile).then((response: any) => {
         if (response.id) {
+          this.componentsService.profileId = response.id;
           this.loading = false;
           this.openSnackBar("El perfil se ha creado exitosamente", "Success");
+          this.router.navigate(['/detalle-perfil'])
         }
       }).catch(() => {
         this.openSnackBar("Error al crear el perfil", "Error");

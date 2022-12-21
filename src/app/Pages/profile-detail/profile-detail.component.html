@@ -1,1 +1,95 @@
-<p>profile-detail works!</p>
+<div *ngIf="profile != []">
+    <div class="row">
+        <div class="col-1 back-col">
+            <mat-icon (click)="goTohome()" class="pointer">arrow_back_ios</mat-icon>
+        </div>
+        <div class="col-11">
+            <div class="row title">
+                ¡Hola&nbsp;{{profile.name}}!
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Módulo de perfil, datos personales, foto -->
+        <div class="col-6 center">
+            <div class="profile-container">
+                <div class="row profile-title center">
+                    Entrenador &nbsp;&nbsp;&nbsp;
+                    <img src="./assets/medal.png" alt="Medalla" class="medal-img">
+                </div>
+                <div class="row picture-row center">
+                    <div class="picture-container center">
+                        <div *ngIf="url == ''" class="picture-background center">
+                            <mat-icon class="profile-icon">person_outline</mat-icon>
+                        </div>
+                        <div *ngIf="url != ''" class="profile-image-container center">
+                            <img [src]="url" alt="Imagen de perfil" class="profile-image">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col profile-detail-title left-space">Pasatiempo:</div>
+                    <div class="col profile-detail-value right-space" *ngIf="profile.hobbie != ''">{{profile.hobbie}}</div>
+                    <div class="col profile-detail-value right-space" *ngIf="profile.hobbie == '' || profile.hobbie == undefined">N/A</div>
+                </div>
+                <div class="row">
+                    <div class="col profile-detail-title left-space">Edad:</div>
+                    <div class="col profile-detail-value right-space">{{years}}&nbsp;años</div>
+                </div>
+                <div class="row" *ngIf="profile.document != 'Carnet de minoridad'">
+                    <div class="col profile-detail-title left-space">DUI:</div>
+                    <div class="col profile-detail-value right-space">{{profile.document}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Módulo de pokemons -->
+        <div class="col-6">
+            <div class="row second-title title-profile">Mis Pokémon</div>
+            <div class="row" *ngIf="pokemons.length > 0">
+                <div class="pokemon-container" *ngFor="let pokemon of pokemons">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="row center">
+                                <img [src]="pokemon.sprites.front_default" alt="Pokemon" class="pokemon-image">
+                            </div>
+                            <div class="row pokemon-name center">
+                                {{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}}
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="row stat-name">HP</div>
+                            <div class="row stat-name">Ataque</div>
+                            <div class="row stat-name">Defensa</div>
+                            <div class="row stat-name">Ataque especial</div>
+                            <div class="row stat-name">Defensa especial</div>
+                            <div class="row stat-name">Velocidad</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="row center stat-name">
+                                <mat-progress-bar mode="determinate" [value]="pokemon.hp"></mat-progress-bar>
+                            </div>
+                            <div class="row center stat-name">
+                                <mat-progress-bar mode="determinate" [value]="pokemon.attack"></mat-progress-bar>
+                            </div>
+                            <div class="row center stat-name">
+                                <mat-progress-bar mode="determinate" [value]="pokemon.defense"></mat-progress-bar>
+                            </div>
+                            <div class="row center stat-name">
+                                <mat-progress-bar mode="determinate" [value]="pokemon.specialAttack"></mat-progress-bar>
+                            </div>
+                            <div class="row center stat-name">
+                                <mat-progress-bar mode="determinate" [value]="pokemon.specialDefense"></mat-progress-bar>
+                            </div>
+                            <div class="row center stat-name">
+                                <mat-progress-bar mode="determinate" [value]="pokemon.speed"></mat-progress-bar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -38,7 +38,7 @@
                             <img src="./assets/pokeball.png" alt="Pokeball" class="poke-icon">
                             Nombre 
                         </th>
-                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                        <td mat-cell *matCellDef="let element" (click)="goToProfile(element.id)"> {{element.name}} </td>
                     </ng-container>
             
                     <ng-container matColumnDef="age">
@@ -46,7 +46,7 @@
                             <img src="./assets/pokeball.png" alt="Pokeball" class="poke-icon">
                             Edad 
                         </th>
-                        <td mat-cell *matCellDef="let element"> {{element.years}} &nbsp;años </td>
+                        <td mat-cell *matCellDef="let element" (click)="goToProfile(element.id)"> {{element.years}} &nbsp;años </td>
                     </ng-container>
             
                     <ng-container matColumnDef="hobbie">
@@ -54,7 +54,7 @@
                             <img src="./assets/pokeball.png" alt="Pokeball" class="poke-icon">
                             Pasatiempo 
                         </th>
-                        <td mat-cell *matCellDef="let element"> {{element.hobbie}} </td>
+                        <td mat-cell *matCellDef="let element" (click)="goToProfile(element.id)"> {{element.hobbie}} </td>
                     </ng-container>
             
                     <ng-container matColumnDef="dui">
@@ -62,7 +62,7 @@
                             <img src="./assets/pokeball.png" alt="Pokeball" class="poke-icon">
                             DUI 
                         </th>
-                        <td mat-cell *matCellDef="let element"> {{element.document}} </td>
+                        <td mat-cell *matCellDef="let element" (click)="goToProfile(element.id)"> {{element.document}} </td>
                     </ng-container>
             
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

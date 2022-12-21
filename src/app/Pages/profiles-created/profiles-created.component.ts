@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { WarningsDialogComponent } from 'src/app/Components/warnings-dialog/warnings-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationComponent } from 'src/app/Components/notification/notification.component';
+import { ComponentsService } from 'src/app/Services/components.service';
 
 @Component({
   selector: 'app-profiles-created',
@@ -24,10 +25,13 @@ export class ProfilesCreatedComponent implements OnInit {
     private fireService: FirebaseService,
     private router: Router,
     public dialog: MatDialog,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private componentService: ComponentsService
   ){}
 
   ngOnInit() {
+    // Consumo de endpoint para obtener usuarios
+
     this.fireService.getProfiles().subscribe({
       next: (response) => {
         for(let profile of response) {
@@ -37,6 +41,7 @@ export class ProfilesCreatedComponent implements OnInit {
           var years = now.diff(birthDate, 'years');
           profile.years = years;
         }
+        
         this.dataSource = new MatTableDataSource(response);
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = "Ítems por página"
@@ -47,6 +52,8 @@ export class ProfilesCreatedComponent implements OnInit {
   goTohome() {
     this.router.navigate(['/inicio']);
   }
+
+  // Funciones para abrir componentes de notificaciones
 
   openDialog(message: string, profile: Profile) {
     const dialogRef = this.dialog.open(WarningsDialogComponent, {
@@ -71,6 +78,8 @@ export class ProfilesCreatedComponent implements OnInit {
     });
   }
 
+  // Consumo de endpoint para eliminar perfil
+
   async deleteProfile(profile: Profile) {
     await this.fireService.deleteProfile(profile).then(() => {
       this.openSnackBar('Perfil eliminado exitosamente', 'Success');
@@ -79,6 +88,8 @@ export class ProfilesCreatedComponent implements OnInit {
     });
   }
 
+  // Función para búsquedas en la tabla
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -86,5 +97,12 @@ export class ProfilesCreatedComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  // Función para navegar al detalle de un perfil
+
+  goToProfile(id: string) {
+    this.componentService.profileId = id;
+    this.router.navigate(['detalle-perfil']);
   }
 }

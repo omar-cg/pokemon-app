@@ -26,6 +26,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ProfileDetailComponent } from './Pages/profile-detail/profile-detail.component';
+import { provideStorage,getStorage } from '@angular/fire/storage';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -55,8 +57,10 @@ import { ProfileDetailComponent } from './Pages/profile-detail/profile-detail.co
     MatSnackBarModule,
     HttpClientModule,
     FormsModule,
+    MatProgressBarModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideFirestore(() => getFirestore())
+    provideFirestore(() => getFirestore()),
+    provideStorage(() => getStorage())
   ],
   providers: [
     MatDatepickerModule

@@ -6,5 +6,5 @@ export interface Profile {
     document?: string | null | undefined,
     years?: number,
     pokemonIds?: number[],
-    imageId?: string
+    profileImageName?: string | null | undefined
 }

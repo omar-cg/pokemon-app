@@ -19,8 +19,8 @@
             </div>
         </div>
     </div>
-    
     <div class="row">
+        <!-- Recuadro de perfil, sin datos, subir foto -->
         <div class="col-6 center">
             <div class="profile-container" *ngIf="firstValidation == false">
                 <div class="row profile-title center">Imagen perfil</div>
@@ -83,6 +83,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- Recuadro de perfil con datos -->
         <div class="col-6 form-col" *ngIf="firstValidation == false">
             <div class="row second-title">Tu información</div>
             <div class="row subtitle">
@@ -132,6 +134,8 @@
                 </div>
             </form>
         </div>
+
+        <!-- Apartado para seleccionar pokemons -->
         <div class="col-6" *ngIf="firstValidation == true">
             <div class="row second-title">Pokémon</div>
             <div class="row subtitle">
@@ -165,6 +169,8 @@
         </div>
     </div>
 </div>
+
+<!-- Pantalla de carga -->
 <div [ngClass]="{'hidden-module': loading == false, 'loading-container': loading == true}">
     <img src="./assets/pokemon_ball.gif" alt="Cargando" [ngClass]="{'hidden-module': loading == false, 'loading-img': loading == true}">
     <label class="loading-text center">Cargando...</label>
