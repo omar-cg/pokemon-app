@@ -135,6 +135,7 @@ export class ProfileCreationComponent implements OnInit {
 
   deleteFile() {
     this.file = undefined;
+    this.profileForm.get('profileImageName')?.setValue("");
     this.url = "";
     setTimeout(() => {
       this.isFile = false;
@@ -240,8 +241,7 @@ export class ProfileCreationComponent implements OnInit {
     this.loading = true;
     let profile: Profile = this.profileForm.value;
     profile.pokemonIds = this.selectedPokemons;
-    if (this.profileForm.value.profileImageName != "" || this.profileForm.value.profileImageName != null 
-        ||this.profileForm.value.profileImageName != undefined) {
+    if (this.file != undefined) {
       this.uploadImage();
     }
     if (this.profileForm.valid) {

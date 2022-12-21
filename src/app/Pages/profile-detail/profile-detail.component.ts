@@ -38,7 +38,7 @@ export class ProfileDetailComponent implements OnInit {
       var birthday = this.profile.birthday;
       var birthDate = new Date(birthday?.seconds*1000);
       this.years = now.diff(birthDate, 'years');
-      if(this.profile.profileImageName != "" || this.profile.profileImageName != null || this.profile.profileImageName != undefined) {
+      if(this.profile.profileImageName != "") {
         this.downloadImage(this.profile.profileImageName);
       }
       this.getPokemons();
@@ -90,11 +90,15 @@ export class ProfileDetailComponent implements OnInit {
     });
   }
 
+  //Consumo de endpoint para descargar imagen de perfil
+
   async downloadImage(imageName: string){
     await this.fireService.getImage(imageName).then(response => {
       this.url = response;
     })
   }
+
+  //Navegación hacia la página de inicio
 
   goTohome() {
     this.router.navigate(['/inicio']);
