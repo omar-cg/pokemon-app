@@ -13,3 +13,25 @@
     min-width: 100%;
     overflow-y: auto;
 }
+
+.poke-icon {
+    width: 20px; 
+    height: 20px;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+    background: whitesmoke;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+}
+
+.example-element-row td {
+    border-bottom-width: 0;
+    cursor: pointer;
+}
+
+.paginator {
+    border-top: 1px #e7e7e7 solid;
+}

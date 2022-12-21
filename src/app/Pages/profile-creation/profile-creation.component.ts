@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
+import { NotificationComponent } from 'src/app/Components/notification/notification.component';
+import { Profile } from 'src/app/Models/profile.interface';
 import { FirebaseService } from 'src/app/Services/firebase.service';
+import { PokemonService } from 'src/app/Services/pokemon.service';
 
 @Component({
   selector: 'app-profile-creation',
@@ -16,6 +20,12 @@ export class ProfileCreationComponent implements OnInit {
   today: Date = new Date();
   readonlyDocInput: boolean = true;
   loading: boolean = false;
+  firstValidation: boolean = false;
+  years: number;
+  pokemons: any = [];
+  pokemonsInfo: any = [];
+  selectedPokemons: any = [];
+  search: any;
   hobbies = ["Jugar Fútbol", "Jugar Basketball", "Jugar Tennis", "Jugar Voleibol", "Jugar Fifa", "Jugar Videojuegos"];
   profileForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.maxLength(20), Validators.pattern('^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9 ]+$')]),
@@ -26,15 +36,17 @@ export class ProfileCreationComponent implements OnInit {
 
   constructor(
     private fireService: FirebaseService,
-    private router: Router
+    private pokemonService: PokemonService,
+    private router: Router,
+    private snackbar: MatSnackBar
   ) {}
 
   ngOnInit() {
     this.profileForm.get("birthday")?.valueChanges.subscribe(value => {
       var now = moment(new Date);
       var birthday = moment(value);
-      var years = now.diff(birthday, 'years');
-      if(years > 17) {
+      this.years = now.diff(birthday, 'years');
+      if (this.years > 17) {
         this.profileForm.get('document')?.addValidators([Validators.required, Validators.pattern("^\\d{8}-\\d{1}$")]);
         this.profileForm.get('document')?.reset();
         this.readonlyDocInput = false;
@@ -44,7 +56,32 @@ export class ProfileCreationComponent implements OnInit {
         this.profileForm.get('document')?.setValue('Carnet de minoridad');
         this.readonlyDocInput = true;
       }
-   })
+    });
+
+    this.pokemonService.getPokemons().subscribe({
+      next: (response: any) => {
+        this.pokemons = response.results
+        for (let item of this.pokemons) {
+          var cutId = item.url.substring(33);
+          var id = cutId.slice(1, -1);
+          item.id = Number(id);
+          if(item.id <= 9) {
+            this.pokemonService.getPokemon(item.id).subscribe({
+              next: (response: any) => {
+                response.isSelected = false;
+                this.pokemonsInfo.push(response);
+              },
+              error: () => {
+                this.openSnackBar("Error al obtener pokémon", "Error");
+              }
+            });
+          }
+        }
+      },
+      error: () => {
+        this.openSnackBar("Error al obtener pokémons", "Error");
+      }
+    });
   }
   
   errorMessageName() {
@@ -88,16 +125,96 @@ export class ProfileCreationComponent implements OnInit {
     }, 500);
   }
 
-  async nextStep() {
+  nextStep() {
     this.loading = true;
-    await this.fireService.addProfile(this.profileForm.value).then(response => {
-      if (response.id) {
-        this.loading = false;
-      }
-    })
+    this.firstValidation = true;
+    setTimeout(() => {
+      this.loading = false;
+    }, 1000);
   }
 
   goTohome() {
     this.router.navigate(['/inicio']);
+  }
+
+  changeValidation() {
+    this.loading = true;
+    this.firstValidation = false;
+    setTimeout(() => {
+      this.loading = false;
+    }, 1000);
+  }
+
+  openSnackBar(message: string, status: string) {
+    this.snackbar.openFromComponent(NotificationComponent, {
+      duration: 3000,
+      panelClass: ['snackbar-styles'],
+      data: {message: message, status: status}
+    });
+  }
+
+  selectPokemon(id: number) {
+    if(this.selectedPokemons.length > 0) {
+      if (!this.selectedPokemons.includes(id)) {
+        this.selectedPokemons.push(id);
+        for(let pokemon of this.pokemonsInfo) {
+          if(pokemon.id == id) {
+            pokemon.isSelected = true;
+          }
+        }
+      } else {
+        for (var i = 0; i < this.selectedPokemons.length; i++) {
+          if (this.selectedPokemons[i] == id) {
+            this.selectedPokemons.splice(i, 1);
+          }
+        }
+        for (let item of this.pokemonsInfo) {
+          if (item.id == id) {
+            item.isSelected = false;
+          }
+        }
+      }
+    } else {
+      this.selectedPokemons.push(id);
+      for (let pokemon of this.pokemonsInfo) {
+        if (pokemon.id == id) {
+          pokemon.isSelected = true;
+        }
+      }
+    }
+  }
+  
+  searchPokemon(){
+    this.pokemonService.getPokemon(this.search).subscribe({
+      next: (response: any) => {
+        this.openSnackBar("Pokémon encontrado", "Success");
+        response.isSelected = false;
+        for(let pokemon of this.pokemonsInfo) {
+          if(pokemon.id == response.id) {
+            this.pokemonsInfo = this.pokemonsInfo.filter((item: any) => item.id !== response.id);
+          }
+        }
+        this.pokemonsInfo.unshift(response);
+      },
+      error: () => {
+        this.openSnackBar("Lo sentimos, no existe un pokémon con ese nombre o índice", "Error");
+      }
+    });
+  }
+
+  async saveProfile() {
+    this.loading = true;
+    let profile: Profile = this.profileForm.value;
+    profile.pokemonIds = this.selectedPokemons;
+    if (this.profileForm.valid) {
+      await this.fireService.addProfile(profile).then((response: any) => {
+        if (response.id) {
+          this.loading = false;
+          this.openSnackBar("El perfil se ha creado exitosamente", "Success");
+        }
+      }).catch(() => {
+        this.openSnackBar("Error al crear el perfil", "Error");
+      });
+    }
   }
 }

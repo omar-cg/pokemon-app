@@ -1,29 +1,32 @@
-<div *ngIf="loading == true" class="loading-container">
-    <img src="./assets/pokemon_ball.gif" alt="Cargando" class="loading-img">
-    <label class="loading-text center">Cargando...</label>
-</div>
 <div *ngIf="loading == false">
     <div class="row">
         <div class="col-1 back-col">
-            <mat-icon class="pointer" (click)="goTohome()">arrow_back_ios</mat-icon>
+            <mat-icon *ngIf="firstValidation == false" class="pointer" (click)="goTohome()">arrow_back_ios</mat-icon>
+            <mat-icon *ngIf="firstValidation == true" class="pointer" (click)="changeValidation()">arrow_back_ios</mat-icon>
         </div>
         <div class="col-11">
-            <div class="row title">
+            <div class="row title" *ngIf="firstValidation == false">
                 ¡Hola! Configuremos tu perfil
             </div>
-            <div class="row subtitle">
+            <div class="row subtitle" *ngIf="firstValidation == false">
                 Queremos conocerte mejor.
+            </div>
+            <div class="row title" *ngIf="firstValidation == true">
+                ¡Ya casi terminamos!
+            </div>
+            <div class="row subtitle" *ngIf="firstValidation == true">
+                Revisa la información, y completa lo solicitado.
             </div>
         </div>
     </div>
     
     <div class="row">
-        <div class="col-6 profile-col">
-            <div class="profile-container">
-                <div class="row profile-title">Imagen perfil</div>
-                <div class="row picture-row">
-                    <div class="picture-container">
-                        <div *ngIf="url == ''" class="picture-background">
+        <div class="col-6 center">
+            <div class="profile-container" *ngIf="firstValidation == false">
+                <div class="row profile-title center">Imagen perfil</div>
+                <div class="row picture-row center">
+                    <div class="picture-container center">
+                        <div *ngIf="url == ''" class="picture-background center">
                             <mat-icon class="profile-icon">person_outline</mat-icon>
                         </div>
                         <div *ngIf="url != ''" class="profile-image-container center">
@@ -51,13 +54,41 @@
                     </div>
                 </div>
             </div>
+            <div class="profile-container" *ngIf="firstValidation == true">
+                <div class="row profile-name center" *ngIf="profileForm.value.name != null">
+                    {{(profileForm.value.name.length > 15)? (profileForm.value.name | slice:0:15)+'...':(profileForm.value.name)}}
+                </div>
+                <div class="row picture-row center">
+                    <div class="picture-container center">
+                        <div *ngIf="url == ''" class="picture-background center">
+                            <mat-icon class="profile-icon">person_outline</mat-icon>
+                        </div>
+                        <div *ngIf="url != ''" class="profile-image-container center">
+                            <img [src]="url" alt="Imagen de perfil" class="profile-image">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col profile-detail-title left-space">Pasatiempo:</div>
+                    <div class="col profile-detail-value right-space" *ngIf="profileForm.value.hobbie != ''">{{profileForm.value.hobbie}}</div>
+                    <div class="col profile-detail-value right-space" *ngIf="profileForm.value.hobbie == '' || profileForm.value.hobbie == undefined">N/A</div>
+                </div>
+                <div class="row">
+                    <div class="col profile-detail-title left-space">Edad:</div>
+                    <div class="col profile-detail-value right-space">{{years}}&nbsp;años</div>
+                </div>
+                <div class="row" *ngIf="profileForm.value.document != 'Carnet de minoridad'">
+                    <div class="col profile-detail-title left-space">DUI:</div>
+                    <div class="col profile-detail-value right-space">{{profileForm.value.document}}</div>
+                </div>
+            </div>
         </div>
-        <div class="col-6 form-col">
+        <div class="col-6 form-col" *ngIf="firstValidation == false">
             <div class="row second-title">Tu información</div>
             <div class="row subtitle">
-                Completa la siguiente información para completar tu perfil.
+                Ingresa la siguiente información para completar tu perfil.
             </div>
-            <form [formGroup]="profileForm" (ngSubmit)="nextStep()">
+            <form [formGroup]="profileForm">
                 <div class="row">
                     <mat-form-field appearance="outline">
                         <mat-label>Nombre</mat-label>
@@ -95,9 +126,46 @@
                 <br>
                 <br>
                 <div class="row center">
-                    <button type="submit" class="btn continue-btn" [ngClass]="{'disabled-btn': !profileForm.valid}">Continuar</button>
+                    <button type="button" (click)="nextStep()" class="btn continue-btn" [ngClass]="{'disabled-btn': !profileForm.valid}">
+                        Continuar
+                    </button>
                 </div>
             </form>
         </div>
+        <div class="col-6" *ngIf="firstValidation == true">
+            <div class="row second-title">Pokémon</div>
+            <div class="row subtitle">
+                Selecciona 3 pokémon para que sean parte de tu equipo.
+            </div>
+            <div class="row">
+                <mat-form-field appearance="outline">
+                    <span matPrefix> </span>
+                    <input type="search" matInput placeholder="Buscar por índice, nombre..." [(ngModel)]="search">
+                    <button matSuffix mat-button (click)="searchPokemon()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                </mat-form-field>
+            </div>
+            <div class="row center">
+                <div class="box pointer" *ngFor="let pokemon of pokemonsInfo" (click)="selectPokemon(pokemon.id)">
+                    <div class="row box-empty-row">&nbsp;</div>
+                    <div class="row box-row pointer" [ngClass]="{'default-color': pokemon.isSelected == false, 'selected-color': pokemon.isSelected == true}">
+                        <div class="pokemon-name center">#{{pokemon.id.toString().padStart(3, 0)}}&nbsp;{{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}}</div>
+                    </div>
+                    <div class="image-box center">
+                        <img class="pokemon-image" [src]="pokemon.sprites.front_default" alt="Pokémon">
+                    </div>
+                </div>
+            </div>
+            <div class="row center save-button-row">
+                <button type="button" (click)="saveProfile()" class="btn continue-btn" [ngClass]="{'disabled-btn': selectedPokemons.length < 3}">
+                    Guardar
+                </button>
+            </div>
+        </div>
     </div>
+</div>
+<div [ngClass]="{'hidden-module': loading == false, 'loading-container': loading == true}">
+    <img src="./assets/pokemon_ball.gif" alt="Cargando" [ngClass]="{'hidden-module': loading == false, 'loading-img': loading == true}">
+    <label class="loading-text center">Cargando...</label>
 </div>

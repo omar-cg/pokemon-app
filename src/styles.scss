@@ -60,3 +60,27 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .snackbar-styles {
     --mdc-snackbar-container-color: white;
 }
+
+.profile-name {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 35px;
+    line-height: 52px;
+    color: #FFFFFF;
+}
+
+.profile-detail-title {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 36px;
+    color: #FFFFFF
+}
+
+.profile-detail-value {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 36px;
+    color: #FFFFFF
+}
