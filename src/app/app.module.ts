@@ -28,6 +28,7 @@ import { FormsModule } from '@angular/forms';
 import { ProfileDetailComponent } from './Pages/profile-detail/profile-detail.component';
 import { provideStorage,getStorage } from '@angular/fire/storage';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { EditProfileComponent } from './Pages/edit-profile/edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     ProfilesCreatedComponent,
     WarningsDialogComponent,
     NotificationComponent,
-    ProfileDetailComponent
+    ProfileDetailComponent,
+    EditProfileComponent
   ],
   imports: [
     BrowserModule,

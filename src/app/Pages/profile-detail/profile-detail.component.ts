@@ -103,4 +103,8 @@ export class ProfileDetailComponent implements OnInit {
   goTohome() {
     this.router.navigate(['/inicio']);
   }
+
+  goToEditProfile() {
+    this.router.navigate(['/edicion-perfil']);
+  }
 }

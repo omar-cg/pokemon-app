@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, collectionData, Firestore, doc, deleteDoc, getDoc } from '@angular/fire/firestore';
-import { FirebaseStorage, getDownloadURL, list, listAll, ref, Storage, uploadBytes } from '@angular/fire/storage';
+import { addDoc, collection, collectionData, Firestore, doc, deleteDoc, getDoc, updateDoc } from '@angular/fire/firestore';
+import { deleteObject, FirebaseStorage, getDownloadURL, list, listAll, ref, Storage, uploadBytes } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
 import { Profile } from '../Models/profile.interface';
 import { getStorage } from "firebase/storage";
@@ -35,6 +35,11 @@ export class FirebaseService {
     return deleteDoc(profileRef);
   }
 
+  updateProfile(profile: Profile) {
+    const profileRef = doc(this.firestore, 'profiles/' + profile.id);
+    return updateDoc(profileRef, {...profile});
+  }
+
   uploadImage(file: any, filename: any) {
     const imgRef = ref(this.storage, `images/${filename}`);
     return uploadBytes(imgRef, file);
@@ -43,6 +48,12 @@ export class FirebaseService {
   getImage(filename: string){
     const storage = getStorage();
     return getDownloadURL(ref(storage, `images/${filename}`))
+  }
+
+  deleteImage(filename: any){
+    const storage = getStorage();
+    const desertRef = ref(storage, `images/${filename}`);
+    return deleteObject(desertRef);
   }
 
 }

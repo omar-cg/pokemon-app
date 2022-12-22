@@ -30,7 +30,7 @@ export class ProfilesCreatedComponent implements OnInit {
   ){}
 
   ngOnInit() {
-    // Consumo de endpoint para obtener usuarios
+    // Consumo de endpoint para obtener usuarios:
 
     this.fireService.getProfiles().subscribe({
       next: (response) => {
@@ -49,11 +49,13 @@ export class ProfilesCreatedComponent implements OnInit {
     });
   }
 
+  // Función para navegar a la página de inicio:
+
   goTohome() {
     this.router.navigate(['/inicio']);
   }
 
-  // Funciones para abrir componentes de notificaciones
+  // Funciones para abrir componentes de notificaciones:
 
   openDialog(message: string, profile: Profile) {
     const dialogRef = this.dialog.open(WarningsDialogComponent, {
@@ -78,9 +80,13 @@ export class ProfilesCreatedComponent implements OnInit {
     });
   }
 
-  // Consumo de endpoint para eliminar perfil
+  // Consumo de endpoint para eliminar perfil:
 
   async deleteProfile(profile: Profile) {
+    if(profile.profileImageName != "") {
+      await this.fireService.deleteImage(profile.profileImageName).then(() => {});
+    }
+
     await this.fireService.deleteProfile(profile).then(() => {
       this.openSnackBar('Perfil eliminado exitosamente', 'Success');
     }).catch(() => {
@@ -88,7 +94,7 @@ export class ProfilesCreatedComponent implements OnInit {
     });
   }
 
-  // Función para búsquedas en la tabla
+  // Función para búsquedas en la tabla:
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -99,7 +105,7 @@ export class ProfilesCreatedComponent implements OnInit {
     }
   }
 
-  // Función para navegar al detalle de un perfil
+  // Función para navegar al detalle de un perfil:
 
   goToProfile(id: string) {
     this.componentService.profileId = id;

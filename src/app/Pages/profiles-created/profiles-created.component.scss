@@ -35,3 +35,12 @@ tr.example-element-row:not(.example-expanded-row):active {
 .paginator {
     border-top: 1px #e7e7e7 solid;
 }
+
+@media(max-width: 700px) {
+    .title {
+        justify-content: center;
+    }
+    .subtitle {
+        justify-content: center;
+    }
+}
