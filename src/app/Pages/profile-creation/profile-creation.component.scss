@@ -192,3 +192,8 @@
 .save-button-row {
     margin-top: 30px;
 }
+
+.disable-module {
+    pointer-events: none;
+    opacity: 50%;
+}

@@ -134,7 +134,7 @@
                 </div>
             </form>
         </div>
-        
+
         <!-- Apartado para seleccionar pokemons -->
         <div class="col-6" *ngIf="firstValidation == true">
             <div class="row second-title">Pokémon</div>
@@ -151,10 +151,12 @@
                 </mat-form-field>
             </div>
             <div class="row center">
-                <div class="box pointer" *ngFor="let pokemon of pokemonsInfo" (click)="selectPokemon(pokemon.id)">
+                <div class="box pointer" *ngFor="let pokemon of pokemonsInfo" (click)="selectPokemon(pokemon.id)" [ngClass]="{'disable-module': selectedPokemons.length >= 3 && pokemon.isSelected == false}">
                     <div class="row box-empty-row">&nbsp;</div>
                     <div class="row box-row pointer" [ngClass]="{'default-color': pokemon.isSelected == false, 'selected-color': pokemon.isSelected == true}">
-                        <div class="pokemon-name center">#{{pokemon.id.toString().padStart(3, 0)}}&nbsp;{{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}}</div>
+                        <div class="pokemon-name center">
+                            #{{pokemon.id.toString().padStart(3, 0)}}&nbsp;{{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}}
+                        </div>
                     </div>
                     <div class="image-box center">
                         <img class="pokemon-image" [src]="pokemon.sprites.front_default" alt="Pokémon">
