@@ -4,7 +4,7 @@
             <mat-icon *ngIf="firstValidation == false" class="pointer" (click)="goTohome()">arrow_back_ios</mat-icon>
             <mat-icon *ngIf="firstValidation == true" class="pointer" (click)="changeValidation()">arrow_back_ios</mat-icon>
         </div>
-        <div class="col-11">
+        <div class="col-md-11">
             <div class="row title" *ngIf="firstValidation == false">
                 ¡Hola! Configuremos tu perfil
             </div>
@@ -20,8 +20,8 @@
         </div>
     </div>
     <div class="row">
-        <!-- Recuadro de perfil, sin datos, subir foto -->
-        <div class="col-6 center">
+        <div class="col-md-6 center-profile">
+            <!-- Recuadro de perfil, sin datos, subir foto -->
             <div class="profile-container" *ngIf="firstValidation == false">
                 <div class="row profile-title center">Imagen perfil</div>
                 <div class="row picture-row center">
@@ -54,6 +54,8 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Recuadro de perfil, con datos -->
             <div class="profile-container" *ngIf="firstValidation == true">
                 <div class="row profile-name center" *ngIf="profileForm.value.name != null">
                     {{(profileForm.value.name.length > 15)? (profileForm.value.name | slice:0:15)+'...':(profileForm.value.name)}}
@@ -84,8 +86,8 @@
             </div>
         </div>
 
-        <!-- Recuadro de perfil con datos -->
-        <div class="col-6 form-col" *ngIf="firstValidation == false">
+        <!-- Apartado de formulario para el ingreso de datos personales -->
+        <div class="col-md-6 form-col" *ngIf="firstValidation == false">
             <div class="row second-title">Tu información</div>
             <div class="row subtitle">
                 Ingresa la siguiente información para completar tu perfil.
@@ -136,7 +138,7 @@
         </div>
 
         <!-- Apartado para seleccionar pokemons -->
-        <div class="col-6" *ngIf="firstValidation == true">
+        <div class="col-md-6" *ngIf="firstValidation == true">
             <div class="row second-title">Pokémon</div>
             <div class="row subtitle">
                 Selecciona 3 pokémon para que sean parte de tu equipo.
@@ -173,7 +175,11 @@
 </div>
 
 <!-- Pantalla de carga -->
-<div [ngClass]="{'hidden-module': loading == false, 'loading-container': loading == true}">
-    <img src="./assets/pokemon_ball.gif" alt="Cargando" [ngClass]="{'hidden-module': loading == false, 'loading-img': loading == true}">
-    <label class="loading-text center">Cargando...</label>
+<div class="row" [ngClass]="{'hidden-module': loading == false}">
+    <div class="row center">
+        <img src="./assets/pokemon_ball.gif" alt="Cargando" [ngClass]="{'hidden-module': loading == false, 'loading-img': loading == true}">
+    </div>
+    <div class="row">
+        <label class="loading-text center">Cargando...</label>
+    </div>
 </div>

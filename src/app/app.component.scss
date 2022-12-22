@@ -9,11 +9,18 @@
 
 .content {
     max-height: 91vh;
-    padding: 50px 100px 100px 100px;
+    padding: 5% 8% 8% 8%;
     overflow-y: auto;
 }
 
 .pokemon-logo {
     height: 90%; 
     width: auto;
+}
+
+@media(max-width: 700px) {
+    .header {
+        padding-left: 0;
+        justify-content: center;
+    }
 }

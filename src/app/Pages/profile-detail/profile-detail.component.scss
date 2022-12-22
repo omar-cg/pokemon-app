@@ -170,7 +170,7 @@
 .pokemon-name {
     font-style: normal;
     font-weight: 700;
-    font-size: 30px;
+    font-size: 25px;
     line-height: 45px;
     color: black;
 }    
@@ -179,6 +179,11 @@
     position: absolute;
     z-index: 3;
     width: 100%;
+}
+
+.center-profile {
+    display: flex;
+    justify-content: center;
 }
 
 .pokemon-image {
@@ -214,4 +219,34 @@
 
 .title-profile {
     margin-bottom: 20px;
+}
+
+.pokemon-col {
+    width: 33.33%;
+    display: grid;
+    align-items: center;
+}
+
+@media(max-width: 700px) {
+    .title {
+        justify-content: center;
+    }
+    .second-title {
+        justify-content: center;
+    }
+    .profile-detail-value {
+        font-size: 15px;
+    }
+    .profile-detail-title {
+        font-size: 15px;
+    }
+    .center-profile {
+        margin-bottom: 10%;
+    }
+    .pokemon-col {
+        width: 50%;
+    }
+    .stat-name {
+        font-size: 15px;
+    }
 }

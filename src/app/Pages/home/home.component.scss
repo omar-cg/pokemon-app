@@ -12,6 +12,7 @@
     background-color:#01426A;
     color: #FFFFFF;
     width: 222px;
+    margin-right: 15px;
 }
 
 .view-btn {
@@ -22,4 +23,11 @@
 
 .buttons-row {
     margin-top: 20px;
+}
+
+@media (max-width: 700px) {
+    .create-btn {
+        margin-right: 0px;
+        margin-bottom: 15px;
+    }
 }
