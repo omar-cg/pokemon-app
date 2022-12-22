@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-1 back-col">
             <mat-icon *ngIf="firstValidation == false" class="pointer" (click)="goTohome()">arrow_back_ios</mat-icon>
-            <mat-icon *ngIf="firstValidation == true" class="pointer" (click)="changeValidation()">arrow_back_ios</mat-icon>
+            <mat-icon *ngIf="firstValidation == true" class="pointer" (click)="backToFormModule()">arrow_back_ios</mat-icon>
         </div>
         <div class="col-md-11">
             <div class="row title" *ngIf="firstValidation == false">

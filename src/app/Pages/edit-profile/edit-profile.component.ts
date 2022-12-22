@@ -50,7 +50,10 @@ export class EditProfileComponent {
   ) {}
 
   ngOnInit() {
-    // Validaciones fecha de cumpleaños, se agregan validadores dependiendo de la edad del perfil
+    if (this.componentsService.profileId == undefined) {
+      this.router.navigate(['/inicio']);
+    }
+    // Validaciones fecha de cumpleaños, se agregan validadores dependiendo de la edad del perfil:
 
     this.profileForm.get("birthday")?.valueChanges.subscribe(value => {
       var now = moment(new Date);

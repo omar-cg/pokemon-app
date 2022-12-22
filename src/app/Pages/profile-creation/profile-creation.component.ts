@@ -116,7 +116,7 @@ export class ProfileCreationComponent implements OnInit {
     }
   }
 
-  // Manejo de archivos
+  // Manejo de archivos:
 
   onFileSelected(event: any) {
     if (event.target.files.length > 0) {
@@ -133,6 +133,8 @@ export class ProfileCreationComponent implements OnInit {
     }
   }
 
+  // Borrar de la vista una imagen que no ha sido subida a la base de datos:
+
   deleteFile() {
     this.file = undefined;
     this.profileForm.get('profileImageName')?.setValue("");
@@ -142,15 +144,17 @@ export class ProfileCreationComponent implements OnInit {
     }, 500);
   }
 
-  uploadImage(){
-    this.fireService.uploadImage(this.file[0], this.profileForm.value.profileImageName).then(() => {
+  // Consumo de endpoint para subir imágenes:
+
+  async uploadImage(){
+    await this.fireService.uploadImage(this.file[0], this.profileForm.value.profileImageName).then(() => {
     }).catch(error => {
       this.openSnackBar(error, "Error")
     });
   }
 
 
-  // Cambio de páginas
+  // Función para cambiar al módulo de selección de pokemons:
 
   nextStep() {
     this.loading = true;
@@ -160,11 +164,15 @@ export class ProfileCreationComponent implements OnInit {
     }, 1000);
   }
 
+  // Función para navegar a la pantalla de inicio
+
   goTohome() {
     this.router.navigate(['/inicio']);
   }
 
-  changeValidation() {
+  //Función para visualizar el formulario de datos personales:
+
+  backToFormModule() {
     this.loading = true;
     this.firstValidation = false;
     setTimeout(() => {
@@ -172,7 +180,7 @@ export class ProfileCreationComponent implements OnInit {
     }, 1000);
   }
 
-  // Abrir componente de notificación
+  // Abrir componente de notificación:
 
   openSnackBar(message: string, status: string) {
     this.snackbar.openFromComponent(NotificationComponent, {
@@ -182,7 +190,7 @@ export class ProfileCreationComponent implements OnInit {
     });
   }
 
-  // Función para seleccionar pokemons
+  // Función para seleccionar pokemons:
 
   selectPokemon(id: number) {
     if(this.selectedPokemons.length > 0) {
@@ -215,7 +223,7 @@ export class ProfileCreationComponent implements OnInit {
     }
   }
 
-  // Funicón para búsqueda de pokemons
+  // Funicón para búsqueda de pokemons:
   
   searchPokemon(){
     this.pokemonService.getPokemon(this.search).subscribe({
@@ -235,14 +243,14 @@ export class ProfileCreationComponent implements OnInit {
     });
   }
 
-  // Función para guardar perfil
+  // Función para crear perfil:
 
   async saveProfile() {
     this.loading = true;
     let profile: Profile = this.profileForm.value;
     profile.pokemonIds = this.selectedPokemons;
     if (this.file != undefined) {
-      this.uploadImage();
+      await this.uploadImage();
     }
     if (this.profileForm.valid) {
       await this.fireService.addProfile(profile).then((response: any) => {

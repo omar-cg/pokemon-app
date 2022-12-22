@@ -26,6 +26,9 @@ export class ProfileDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (this.componentsService.profileId == undefined) {
+      this.router.navigate(['/inicio']);
+    }
     this.getProfile();
   }
 
